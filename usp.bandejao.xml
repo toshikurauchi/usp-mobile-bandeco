@@ -6,7 +6,7 @@
     <sampleQuery description="Consulta cardapio do bandejao da quimica para o almoco de segunda feira">select * from {table} where bandejao='quimica' and dia='segunda' and periodo='almoco';</sampleQuery>
 </meta>
 <bindings>
-    <select itemPath="json.items" produces="JSON">
+    <select itemPath="" produces="XML">
         <inputs>  
             <key id='bandejao' type='xs:string' paramType='variable' required="true" />
             <key id='dia' type='xs:string' paramType='variable' required="false" />
