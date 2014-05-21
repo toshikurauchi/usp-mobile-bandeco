@@ -57,37 +57,37 @@
                 for(var td in tr.td) {
                     var refeicao = <refeicao></refeicao>
                     if(countRef == 0) {
-                        refeicao.refeicao.periodo = 'almoco';
+                        refeicao.periodo = 'almoco';
                     }
                     else {
-                        refeicao.refeicao.periodo = 'jantar';
+                        refeicao.periodo = 'jantar';
                     }
                     var count = 0;
                     for(var p in td.p) {
-                        refeicao.refeicao.teste += <bla></bla>
+                        refeicao.teste += <bla></bla>
                         if(count == 0) {
-                            refeicao.refeicao.dia = p.b.span;
+                            refeicao.dia = p.b.span;
                         }
                         else if(count == 1) {
-                            refeicao.refeicao.principal = p.span;
+                            refeicao.principal = p.span;
                         }
                         else if(count == 2) {
-                            refeicao.refeicao.acompanhamento = p.span;
+                            refeicao.acompanhamento = p.span;
                         }
                         else if(count == 3) {
-                            refeicao.refeicao.salada = p.span;
+                            refeicao.salada = p.span;
                         }
                         else if(count == 4) {
-                            refeicao.refeicao.sobremesa = p.span;
+                            refeicao.sobremesa = p.span;
                         }
                         else if(count == 5) {
                             var countB = 0;
                             for(var b in p.b) {
                                 if(countB == 0) {
-                                    refeicao.refeicao.bebida = b.span;
+                                    refeicao.bebida = b.span;
                                 }
                                 else {
-                                    refeicao.refeicao.calorias = b.span;
+                                    refeicao.calorias = b.span;
                                     break;
                                 }
                                 countB += 1;
