@@ -41,9 +41,9 @@
 
             //var xpath = "//div[@id='calendario']/table/tbody/tr";
             
-            query = y.query('select * from html where url="' + url + '"');
-            results = query.results;
-            /*responseXML = <cursos></cursos>;
+            resp = y.rest('select * from html where url="' + url + '"').get().response;
+            /*results = query.results;
+            responseXML = <cursos></cursos>;
             for each (var tr in results.tr) {
                 if(tr.elements('th').length() == 0) {
                     curso = <curso></curso>;
@@ -69,7 +69,7 @@
             }
             
             response.object = responseXML;*/
-            response.object = results;
+            response.object = resp;
         	]]></execute>
     </select>
 </bindings>
