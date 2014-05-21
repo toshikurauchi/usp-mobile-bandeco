@@ -7,13 +7,9 @@
 </meta>
 <bindings>
     <select itemPath="" produces="XML">
-        <inputs>  
-            <key id='bandejao' type='xs:string' paramType='variable' required="true" />
-            <key id='dia' type='xs:string' paramType='variable' required="false" />
-            <key id='periodo' type='xs:string' paramType='variable' required="false" />
-        </inputs>
         <execute><![CDATA[
             var url = '';
+            bandejao = 'central';
             if(bandejao.toLowerCase() == 'central') {
                 url = 'http://www.usp.br/coseas/cardapio.html';
             }
