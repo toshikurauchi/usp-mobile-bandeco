@@ -64,23 +64,21 @@
                     }
                     var count = 0;
                     refeicao.inner = tr;
+                    refeicao.dia = td.pre.strong.font;
                     for(var p in td.p) {
                         if(count == 0) {
-                            refeicao.dia = p.b.span;
-                        }
-                        else if(count == 1) {
                             refeicao.principal = p.span;
                         }
-                        else if(count == 2) {
+                        else if(count == 1) {
                             refeicao.acompanhamento = p.span;
                         }
-                        else if(count == 3) {
+                        else if(count == 2) {
                             refeicao.salada = p.span;
                         }
-                        else if(count == 4) {
+                        else if(count == 3) {
                             refeicao.sobremesa = p.span;
                         }
-                        else if(count == 5) {
+                        else if(count == 4) {
                             var countB = 0;
                             for(var b in p.b) {
                                 if(countB == 0) {
