@@ -47,7 +47,7 @@
             
             var firstRow = true;
             var cardapio = <cardapio></cardapio>
-            cardapio.inner = results
+            cardapio.inner = results;
             for each(var tr in results.tbody.tr) {
                 if(firstRow) {
                     firstRow = false;
