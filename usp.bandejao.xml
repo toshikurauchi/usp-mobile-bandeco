@@ -63,7 +63,7 @@
                         refeicao.periodo = 'jantar';
                     }
                     var count = 0;
-                    for(var p in td.p) {
+                    for(var p in td) {
                         refeicao.teste += <bla></bla>
                         if(count == 0) {
                             refeicao.dia = p.b.span;
