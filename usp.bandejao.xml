@@ -60,10 +60,11 @@
                         refeicao.refeicao.periodo = 'almoco';
                     }
                     else {
-                        refeicao.refeicao.periodo = 'janta';
+                        refeicao.refeicao.periodo = 'jantar';
                     }
                     var count = 0;
                     for(var p in td.p) {
+                        refeicao.refeicao.teste += <bla></bla>
                         if(count == 0) {
                             refeicao.refeicao.dia = p.b.span;
                         }
