@@ -1,45 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <table xmlns="http://query.yahooapis.com/v1/schema/table.xsd" https="true">
-    <meta>
-        <author>Paul Donnelly</author>
-        <documentationURL>http://developer.netflix.com/docs/REST_API_Reference#0_52696</documentationURL>
-    </meta>
-      <bindings>
-        <select itemPath="" produces="XML" >
-          <urls>
-            <url>http://api-public.netflix.com/catalog/titles/</url>
-          </urls>
-         <paging model="offset">
-           <start id="start_index" default="0" />
-           <pagesize id="max_results" max="100" />
-           <total default="20" />
-         </paging>
-          <inputs>
-                <key id="term" type="xs:string" paramType="query" required="true" />
-                <key id="ck" type="xs:string" paramType="variable" required="true" />
-                <key id="cs" type="xs:string" paramType="variable" required="true" />
-          </inputs>
-          <execute><![CDATA[
-// Include the OAuth libraries from oauth.net
-y.include("http://oauth.googlecode.com/svn/code/javascript/oauth.js");
-y.include("http://oauth.googlecode.com/svn/code/javascript/sha1.js");
+<meta>
+    <author>Andrew Kurauchi</author>
+    <description>Cardapio do bandejao da USP</description>
+    <sampleQuery description="Consulta cardapio do bandejao da quimica para o almoco de segunda feira">select * from {table} where bandejao='quimica' and dia='segunda' and periodo='almoco';</sampleQuery>
+</meta>
+<bindings>
+    <select itemPath="" produces="JSON">
+        <inputs>  
+            <key id='bandejao' type='xs:string' paramType='variable' required="true" />
+            <key id='dia' type='xs:string' paramType='variable' required="false" />
+            <key id='periodo' type='xs:string' paramType='variable' required="false" />
+        </inputs>
+        <execute><![CDATA[
+            y.include('http://www.datatables.org/javascript/json2.js');
+            
+            var url = '';
+            bandejao = 'central';
+            if(bandejao.toLowerCase() == 'central') {
+                url = 'http://www.usp.br/coseas/cardapio.html';
+            }
+            else if(bandejao.toLowerCase() == 'fisica') {
+                url = 'http://www.usp.br/coseas/cardapiofisica.html';
+            }
+            else if(bandejao.toLowerCase() == 'quimica') {
+                url = 'http://www.usp.br/coseas/cardapioquimica.html';
+            }
+            else if(bandejao.toLowerCase() == 'pusp') {
+                url = 'http://www.usp.br/coseas/cardcocesp.html';
+            }
+            else if(bandejao.toLowerCase() == 'doc') {
+                url = 'http://www.usp.br/coseas/carddoc.html';
+            }
+            else if(bandejao.toLowerCase() == 'enf') {
+                url = 'http://www.usp.br/coseas/cardEscEnf.html';
+            }
+            else if(bandejao.toLowerCase() == 'fsp') {
+                url = 'http://www.usp.br/coseas/cardFSP.html';
+            }
+            else if(bandejao.toLowerCase() == 'direito') {
+                url = 'http://www.usp.br/coseas/cardFacDireito.html';
+            }
 
-// Collect all the parameters
-var encodedurl = request.url;
-var accessor = { consumerSecret: cs, tokenSecret: ""};
-var message = { action: encodedurl, method: "GET", parameters: [["oauth_consumer_key",ck],["oauth_version","1.0"]]};
-OAuth.setTimestampAndNonce(message);
-
-// Sign the request
-OAuth.SignatureMethod.sign(message, accessor);
-
-try {
-   // get the content from service along with the OAuth header, and return the result back out
-   response.object = request.contentType('application/xml').header("Authorization", OAuth.getAuthorizationHeader("netflix.com", message.parameters)).get().response;
-} catch(err) {
-   response.object = {'result':'failure', 'error': err};
-}
-          ]]></execute>
-        </select>
-      </bindings>
+            //var xpath = "//div[@id='calendario']/table/tbody/tr";
+            
+            if(url == '') {
+                y.exit(204, "Bandejao nao especificado."); 
+            }
+            rsp = y.rest(url).get().response;
+            if(!rsp){ 
+                y.exit(204, "Desculpe, conteudo nao encontrado."); 
+            } 
+            else { 
+                response.object = rsp);
+            } 
+            /*results = query.results;
+            responseXML = <cursos></cursos>;
+            for each (var tr in results.tr) {
+                if(tr.elements('th').length() == 0) {
+                    curso = <curso></curso>;
+                    for each(var td in tr.td) {
+                        if(td.@['class'] == 'curso') {
+                            curso.curso += <nome>{td.a.*}</nome>;
+                        }
+                        if(td.@['class'] == 'data') {
+                            curso.curso += <data>{td.p.*}</data>;
+                        }
+                        if(td.@['class'] == 'periodo') {
+                            curso.curso += <periodo>{td.@title}</periodo>;
+                        }
+                        if(td.@['class'] == 'cidade') {
+                            curso.curso += <cidade>{td.p.*}</cidade>;
+                        }
+                        if(td.@['class'] == 'comentario') {
+                            curso.curso += <comentario>{td.p.*}</comentario>;
+                        }
+                    }
+                    responseXML.cursos += curso;
+                }
+            }
+            
+            response.object = responseXML;*/
+        	]]></execute>
+    </select>
+</bindings>
 </table>
