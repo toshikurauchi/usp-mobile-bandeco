@@ -6,13 +6,15 @@
     <sampleQuery description="Consulta cardapio do bandejao da quimica para o almoco de segunda feira">select * from {table} where bandejao='quimica' and dia='segunda' and periodo='almoco';</sampleQuery>
 </meta>
 <bindings>
-    <select itemPath="" produces="XML">
+    <select itemPath="" produces="JSON">
         <inputs>  
             <key id='bandejao' type='xs:string' paramType='variable' required="true" />
             <key id='dia' type='xs:string' paramType='variable' required="false" />
             <key id='periodo' type='xs:string' paramType='variable' required="false" />
         </inputs>
         <execute><![CDATA[
+            y.include('http://www.datatables.org/javascript/json2.js');
+            
             var url = '';
             bandejao = 'central';
             if(bandejao.toLowerCase() == 'central') {
@@ -45,12 +47,12 @@
             if(url == '') {
                 y.exit(204, "Bandejao nao especificado."); 
             }
-            resp = y.rest(url).get().response;
-            if(!resp){ 
+            rsp = y.rest(url).get().response;
+            if(!rsp){ 
                 y.exit(204, "Desculpe, conteudo nao encontrado."); 
             } 
             else { 
-                response.object = resp;
+                response.object = rsp);
             } 
             /*results = query.results;
             responseXML = <cursos></cursos>;
