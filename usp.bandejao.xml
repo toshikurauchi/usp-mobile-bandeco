@@ -14,7 +14,6 @@
         </inputs>
         <execute><![CDATA[
             var url = '';
-            bandejao = 'central';
             if(bandejao.toLowerCase() == 'central') {
                 url = 'http://www.usp.br/coseas/cardapio.html';
             }
