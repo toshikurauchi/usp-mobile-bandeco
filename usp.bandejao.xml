@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table xmlns="http://query.yahooapis.com/v1/schema/table.xsd" https="false">
+<meta>
+    <author>Andrew Kurauchi</author>
+    <description>Cardapio do bandejao da USP</description>
+    <sampleQuery description="Consulta cardapio do bandejao da quimica para o almoco de segunda feira">select * from {table} where bandejao='quimica' and dia='segunda' and periodo='almoco';</sampleQuery>
+</meta>
+<bindings>
+    <select itemPath="json.items" produces="JSON">
+        <inputs>  
+            <key id='bandejao' type='xs:string' paramType='variable' required="true" />
+            <key id='dia' type='xs:string' paramType='variable' required="false" />
+            <key id='periodo' type='xs:string' paramType='variable' required="false" />
+        </inputs>
+        <execute><![CDATA[
+            var url = '';
+            if(bandejao.toLowerCase() == 'central') {
+                url = 'http://www.usp.br/coseas/cardapio.html';
+            }
+            else if(bandejao.toLowerCase() == 'fisica') {
+                url = 'http://www.usp.br/coseas/cardapiofisica.html';
+            }
+            else if(bandejao.toLowerCase() == 'quimica') {
+                url = 'http://www.usp.br/coseas/cardapioquimica.html';
+            }
+            else if(bandejao.toLowerCase() == 'pusp') {
+                url = 'http://www.usp.br/coseas/cardcocesp.html';
+            }
+            else if(bandejao.toLowerCase() == 'doc') {
+                url = 'http://www.usp.br/coseas/carddoc.html';
+            }
+            else if(bandejao.toLowerCase() == 'enf') {
+                url = 'http://www.usp.br/coseas/cardEscEnf.html';
+            }
+            else if(bandejao.toLowerCase() == 'fsp') {
+                url = 'http://www.usp.br/coseas/cardFSP.html';
+            }
+            else if(bandejao.toLowerCase() == 'direito') {
+                url = 'http://www.usp.br/coseas/cardFacDireito.html';
+            }
+
+            //var xpath = "//div[@id='calendario']/table/tbody/tr";
+            
+            query = y.query('select * from html where url="' + url + '"');
+            results = query.results;
+            /*responseXML = <cursos></cursos>;
+            for each (var tr in results.tr) {
+                if(tr.elements('th').length() == 0) {
+                    curso = <curso></curso>;
+                    for each(var td in tr.td) {
+                        if(td.@['class'] == 'curso') {
+                            curso.curso += <nome>{td.a.*}</nome>;
+                        }
+                        if(td.@['class'] == 'data') {
+                            curso.curso += <data>{td.p.*}</data>;
+                        }
+                        if(td.@['class'] == 'periodo') {
+                            curso.curso += <periodo>{td.@title}</periodo>;
+                        }
+                        if(td.@['class'] == 'cidade') {
+                            curso.curso += <cidade>{td.p.*}</cidade>;
+                        }
+                        if(td.@['class'] == 'comentario') {
+                            curso.curso += <comentario>{td.p.*}</comentario>;
+                        }
+                    }
+                    responseXML.cursos += curso;
+                }
+            }
+            
+            response.object = responseXML;*/
+            response.object = results;
+        	]]></execute>
+    </select>
+</bindings>
+</table>
