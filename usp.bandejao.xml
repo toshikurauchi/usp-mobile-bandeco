@@ -62,7 +62,6 @@
                         refeicao.periodo = 'jantar';
                     }
                     var count = 0;
-                    refeicao.inner = tr.td[td];
                     for(var p in td.p) {
                         if(count == 0) {
                             refeicao.principal = p.span;
