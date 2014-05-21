@@ -42,7 +42,7 @@
             if(url == '') {
                 y.exit(204, "Bandejao nao especificado."); 
             }
-            var xpath = "//tbody";
+            var xpath = "";
             var results = y.query('select * from html where url="' + url + '" and xpath="' + xpath + '"').results;
             
             var firstRow = true;
