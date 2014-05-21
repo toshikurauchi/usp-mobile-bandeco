@@ -64,7 +64,6 @@
                     }
                     var count = 0;
                     refeicao.inner = tr;
-                    //refeicao.dia = td.pre.strong.font;
                     for(var p in td.p) {
                         if(count == 0) {
                             refeicao.principal = p.span;
