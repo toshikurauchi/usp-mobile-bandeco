@@ -64,6 +64,9 @@
                     var count = 0;
                     for(var p in td.p) {
                         if(count == 0) {
+                            refeicao.dia = td.p.b.span;
+                        }
+                        if(count == 0) {
                             refeicao.principal = p.span;
                         }
                         else if(count == 1) {
