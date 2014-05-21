@@ -45,7 +45,8 @@
             }
             var xpath = "//tbody";
             var results = y.query('select * from html where url="' + url + '" and xpath="' + xpath + '"').results;
-            var firstRow = true;
+            response.object = results;
+            /*var firstRow = true;
             for each(var tr in results.tr) {
                 if(firstRow) {
                     firstRow = false;
