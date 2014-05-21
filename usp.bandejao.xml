@@ -54,7 +54,7 @@
                 }
                 var countRef = 0;
                 var cardapio = <cardapio></cardapio>
-                for(var tdref in tr.td) {
+                for(var td in tr.td) {
                     var refeicao = <refeicao></refeicao>
                     if(countRef == 0) {
                         refeicao.periodo = 'almoco';
@@ -63,9 +63,9 @@
                         refeicao.periodo = 'jantar';
                     }
                     var count = 0;
-                    refeicao.inner = tdref;
-                    refeicao.dia = tdref.pre.strong.font;
-                    for(var p in tdref.p) {
+                    refeicao.inner = tr;
+                    refeicao.dia = td.pre.strong.font;
+                    for(var p in td.p) {
                         if(count == 0) {
                             refeicao.principal = p.span;
                         }
