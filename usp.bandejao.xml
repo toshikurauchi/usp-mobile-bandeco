@@ -47,7 +47,7 @@
             if(url == '') {
                 y.exit(204, "Bandejao nao especificado."); 
             }
-            rsp = y.rest(url).get().response;
+            var rsp = y.rest(url).get().response;
             if(!rsp){ 
                 y.exit(204, "Desculpe, conteudo nao encontrado."); 
             } 
