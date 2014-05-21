@@ -6,15 +6,13 @@
     <sampleQuery description="Consulta cardapio do bandejao da quimica para o almoco de segunda feira">select * from {table} where bandejao='quimica' and dia='segunda' and periodo='almoco';</sampleQuery>
 </meta>
 <bindings>
-    <select itemPath="" produces="JSON">
+    <select itemPath="" produces="XML">
         <inputs>  
             <key id='bandejao' type='xs:string' paramType='variable' required="true" />
             <key id='dia' type='xs:string' paramType='variable' required="false" />
             <key id='periodo' type='xs:string' paramType='variable' required="false" />
         </inputs>
         <execute><![CDATA[
-            y.include('http://www.datatables.org/javascript/json2.js');
-            
             var url = '';
             bandejao = 'central';
             if(bandejao.toLowerCase() == 'central') {
@@ -42,18 +40,65 @@
                 url = 'http://www.usp.br/coseas/cardFacDireito.html';
             }
 
-            //var xpath = "//div[@id='calendario']/table/tbody/tr";
-            
             if(url == '') {
                 y.exit(204, "Bandejao nao especificado."); 
             }
-            var rsp = y.rest(url).get().response;
-            if(!rsp){ 
-                y.exit(204, "Desculpe, conteudo nao encontrado."); 
-            } 
-            else { 
-                response.object = rsp;
-            } 
+            var xpath = "//tbody";
+            var results = y.query('select * from html where url="' + url + '" and xpath="' + xpath + '"').results;
+            var firstRow = true;
+            for each(var tr in results.tr) {
+                if(firstRow) {
+                    firstRow = false;
+                    continue;
+                }
+                var countRef = 0;
+                var cardapio = <cardapio></cardapio>
+                for(var td in tr.td) {
+                    var refeicao = <refeicao></refeicao>
+                    if(countRef == 0) {
+                        refeicao.refeicao.periodo = 'almoco';
+                    }
+                    else {
+                        refeicao.refeicao.periodo = 'janta';
+                    }
+                    var count = 0;
+                    for(var p in td.p) {
+                        if(count == 0) {
+                            refeicao.refeicao.dia = p.b.span;
+                        }
+                        else if(count == 1) {
+                            refeicao.refeicao.principal = p.span;
+                        }
+                        else if(count == 2) {
+                            refeicao.refeicao.acompanhamento = p.span;
+                        }
+                        else if(count == 3) {
+                            refeicao.refeicao.salada = p.span;
+                        }
+                        else if(count == 4) {
+                            refeicao.refeicao.sobremesa = p.span;
+                        }
+                        else if(count == 5) {
+                            var countB = 0;
+                            for(var b in p.b) {
+                                if(countB == 0) {
+                                    refeicao.refeicao.bebida = b.span;
+                                }
+                                else {
+                                    refeicao.refeicao.calorias = b.span;
+                                    break;
+                                }
+                                countB += 1;
+                            }
+                        }
+                        count += 1;
+                    }
+                    cardapio.cardapio += refeicao;
+                    countRef += 1;
+                }
+            }
+            response.object = cardapio;
+            
             /*results = query.results;
             responseXML = <cursos></cursos>;
             for each (var tr in results.tr) {
