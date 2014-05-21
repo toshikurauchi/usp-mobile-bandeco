@@ -41,7 +41,16 @@
 
             //var xpath = "//div[@id='calendario']/table/tbody/tr";
             
-            resp = y.rest('select * from html where url="' + url + '"').get().response;
+            if(url == '') {
+                y.exit(204, "Bandejao nao especificado."); 
+            }
+            resp = y.rest(url).get().response;
+            if(!resp){ 
+                y.exit(204, "Desculpe, conteudo nao encontrado."); 
+            } 
+            else { 
+                response.object = resp;
+            } 
             /*results = query.results;
             responseXML = <cursos></cursos>;
             for each (var tr in results.tr) {
@@ -69,7 +78,6 @@
             }
             
             response.object = responseXML;*/
-            response.object = resp;
         	]]></execute>
     </select>
 </bindings>
