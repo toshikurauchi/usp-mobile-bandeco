@@ -52,7 +52,7 @@
                 y.exit(204, "Desculpe, conteudo nao encontrado."); 
             } 
             else { 
-                response.object = rsp);
+                response.object = rsp;
             } 
             /*results = query.results;
             responseXML = <cursos></cursos>;
