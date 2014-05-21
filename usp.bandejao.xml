@@ -63,7 +63,7 @@
                         refeicao.periodo = 'jantar';
                     }
                     var count = 0;
-                    refeicao.inner = tr.td;
+                    refeicao.inner = td;
                     refeicao.dia = td.pre.strong.font;
                     for(var p in td.p) {
                         if(count == 0) {
