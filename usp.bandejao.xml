@@ -48,7 +48,7 @@
             var firstRow = true;
             var cardapio = <cardapio></cardapio>
             cardapio.cardapio.inner = results;
-            for each(var tr in results.tbody.tr) {
+            /*for each(var tr in results.tbody.tr) {
                 if(firstRow) {
                     firstRow = false;
                     continue;
@@ -97,7 +97,7 @@
                     cardapio.cardapio += refeicao;
                     countRef += 1;
                 }
-            }
+            }*/
             response.object = cardapio;
             
             /*results = query.results;
