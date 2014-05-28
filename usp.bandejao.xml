@@ -14,9 +14,8 @@
         </inputs>
         <execute><![CDATA[
             function findTag(htmlString, tag) {
-            return htmlString;
-                var begin = htmlString.indexOf("<" + tag + ">");
-                var end = htmlString.indexOf("</" + tag + ">");
+                var begin = htmlString.indexOf("<" + tag);
+                var end = htmlString.indexOf("</" + tag);
                 if (begin != -1 && end != -1 && begin < end) {
                     return htmlString.substring(begin, end);
                 }
@@ -54,7 +53,7 @@
             }
             var xpath = "//tbody";
             var result = y.rest(url).get().response;
-            result = findTag(result, "tbody");
+            result = findTag(result, "table");
             //result = result.replace('&lt;', '<').replace('&gt;', '>');
             
             var firstRow = true;
