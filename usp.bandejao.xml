@@ -42,8 +42,10 @@
             if(url == '') {
                 y.exit(204, "Bandejao nao especificado."); 
             }
+            var xpath = "//tbody";
             var result = y.rest(url).get().response;
-            result = new XML(result.replace('&lt;', '<').replace('&gt;', '>'));
+            result = result.replace('&lt;', '<').replace('&gt;', '>');
+            result = y.xpath(result, xpath);
             
             var firstRow = true;
             var cardapio = <cardapio></cardapio>
