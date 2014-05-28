@@ -19,8 +19,8 @@
                     begin = begin + htmlString.substring(begin).indexOf(">");
                 }
                 var end = htmlString.indexOf("</" + tag);
-                if (begin != -1 && end != -1 && begin < end) {
-                    return htmlString.substring(begin, end);
+                if (begin != -1 && end != -1 && begin + 1 < end) {
+                    return htmlString.substring(begin + 1, end);
                 }
                 return "";
             }
