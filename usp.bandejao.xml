@@ -31,7 +31,7 @@
                 begin = indices[0];
                 end = indices[1];
                 while (begin != -1 && end != -1) {
-                    tags.append(htmlString.substring(begin, end));
+                    tags.push(htmlString.substring(begin, end));
                     indices = findFirstTagIndices(htmlString, tag);
                     begin = indices[0];
                     end = indices[1];
