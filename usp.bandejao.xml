@@ -16,7 +16,7 @@
             function findTag(htmlString, tag) {
                 var begin = htmlString.indexOf("<" + tag);
                 if (begin != -1) {
-                    begin = htmlString.substring(begin).indexOf(">");
+                    begin = begin + htmlString.substring(begin).indexOf(">");
                 }
                 var end = htmlString.indexOf("</" + tag);
                 if (begin != -1 && end != -1 && begin < end) {
