@@ -13,6 +13,14 @@
             <key id='periodo' type='xs:string' paramType='variable' required="false" />
         </inputs>
         <execute><![CDATA[
+            function findTag(htmlString, tag) {
+                var begin = htmlString.indexOf("<" + tag + ">");
+                var end = htmlString.lastIndexOf("</" + tag + ">");
+                if (begin != -1 && end != -1 && begin < end) {
+                    return htmlString.substring(begin, end);
+                }
+                return "";
+            }
 
             var url = '';
             if(bandejao.toLowerCase() == 'central') {
@@ -45,6 +53,7 @@
             }
             var xpath = "//tbody";
             var result = y.rest(url).get().response;
+            result = findTag(result, "tbody");
             //result = result.replace('&lt;', '<').replace('&gt;', '>');
             
             var firstRow = true;
