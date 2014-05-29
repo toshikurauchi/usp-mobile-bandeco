@@ -70,7 +70,7 @@
             }
             var xpath = "//tbody";
             var result = y.rest(url).get().response;
-            //result = findTag(result, "tr");
+            result = findTag(result, "tr");
             //result = result.replace('&lt;', '<').replace('&gt;', '>');
             
             var firstRow = true;
