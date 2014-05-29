@@ -67,21 +67,20 @@
             if(url == '') {
                 y.exit(204, "Bandejao nao especificado."); 
             }
-            var xpath = "//tbody";
             var result = y.rest(url).get().response;
-            result = findTag(result, "tr");
+            trs = findTag(result, "tr");
             
             var firstRow = true;
             var cardapio = <cardapio></cardapio>
-            cardapio.cardapio.inner = result;
-            /*cardapio.cardapio.inner = results.body;
-            /*for each(var tr in results.tbody.tr) {
+            cardapio.cardapio.inner = trs;
+            for (var tr in trs) {
                 if(firstRow) {
                     firstRow = false;
                     continue;
                 }
                 var countRef = 0;
-                for(var td in tr.td) {
+                var tds = findTag(tr, "td");
+                for (var td in tds) {
                     var refeicao = <refeicao></refeicao>
                     if(countRef == 0) {
                         refeicao.periodo = 'almoco';
@@ -90,7 +89,10 @@
                         refeicao.periodo = 'jantar';
                     }
                     var count = 0;
-                    for(var p in td.p) {
+                    var fonts = findTag(td, "font");
+                    refeicao.dia = fonts[0];
+                    refeicao.comida = fonts[2];
+                    /*for(var p in td.p) {
                         if(count == 0) {
                             refeicao.dia = td.p.b.span;
                         }
@@ -120,11 +122,11 @@
                             }
                         }
                         count += 1;
-                    }
+                    }*/
                     cardapio.cardapio += refeicao;
                     countRef += 1;
                 }
-            }*/
+            }
             response.object = cardapio;
             
             /*results = query.results;
