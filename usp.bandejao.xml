@@ -28,6 +28,9 @@
                     if (begin != -1 && end != -1 && begin + 1 < end) {
                         tags.push(htmlString.substring(begin + 1, end));
                     }
+                    else {
+                        break;
+                    }
                 }
                 return tags;
             }
