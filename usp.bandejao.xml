@@ -72,7 +72,6 @@
             
             var firstRow = true;
             var cardapio = <cardapio></cardapio>
-            cardapio.cardapio.inner = trs;
             for (var tr_i in trs) {
                 var tr = trs[tr_i]
                 if(firstRow) {
@@ -81,8 +80,6 @@
                 }
                 var countRef = 0;
                 var tds = findTag(tr, "td");
-                cardapio.tds += tds;
-                cardapio.trs += tr;
                 for (var td_i in tds) {
                     var td = tds[td_i];
                     var refeicao = <refeicao></refeicao>
