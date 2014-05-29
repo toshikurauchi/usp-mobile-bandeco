@@ -33,7 +33,7 @@
                         break;
                     }
                 }
-                return tags;
+                return htmlString;
             }
 
             var url = '';
