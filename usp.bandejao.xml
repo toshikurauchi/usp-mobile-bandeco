@@ -27,6 +27,7 @@
                     }
                     if (begin != -1 && end != -1 && begin + 1 < end) {
                         tags.push(htmlString.substring(begin + 1, end));
+                        htmlString = htmlString.substring(end);
                     }
                     else {
                         break;
