@@ -92,6 +92,7 @@
                     }
                     var count = 0;
                     var fonts = findTag(td, "font");
+                    refeicao.fonts = fonts;
                     refeicao.dia = fonts[0];
                     refeicao.comida = fonts[2];
                     
