@@ -71,7 +71,7 @@
             
             var firstRow = true;
             var cardapio = <cardapio></cardapio>
-            cardapio.cardapio.inner = result[2];
+            cardapio.cardapio.inner = result[1];
             /*cardapio.cardapio.inner = results.body;
             /*for each(var tr in results.tbody.tr) {
                 if(firstRow) {
