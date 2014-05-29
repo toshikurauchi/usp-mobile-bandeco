@@ -17,21 +17,21 @@
                 var tags = [];
                 while(1) {
                     var begin = htmlString.indexOf("<" + tag);
+                    var end = htmlString.indexOf("</" + tag);
                     if (begin != -1) {
                         begin = begin + htmlString.substring(begin).indexOf(">");
                     }
-                    var end = htmlString.indexOf("</" + tag);
                     else {
                         begin = -1;
                         end = -1;
                     }
                     if (begin != -1 && end != -1 && begin + 1 < end) {
                         tags.push(htmlString.substring(begin + 1, end));
+                        htmlString = htmlString.substring(end);
                     }
                     else {
                         break;
                     }
-                    htmlString = htmlString.substring(end);
                 }
                 return tags;
             }
