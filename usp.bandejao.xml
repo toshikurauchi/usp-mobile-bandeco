@@ -14,7 +14,6 @@
         </inputs>
         <execute><![CDATA[            
             function findTag(htmlString, tag) {
-                tags = [];
 
                     var begin = htmlString.indexOf("<" + tag);
                     if (begin != -1) {
@@ -29,10 +28,10 @@
                         end = -1;
                     }
                     if (begin != -1 && end != -1) {
-                        tags.push(htmlString.substring(begin, end));
+                        return htmlString.substring(begin, end)
                     }
                     
-                return tags;
+                return "";
             }
 
             var url = '';
