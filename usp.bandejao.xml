@@ -92,37 +92,7 @@
                     var fonts = findTag(td, "font");
                     refeicao.dia = fonts[0];
                     refeicao.comida = fonts[2];
-                    /*for(var p in td.p) {
-                        if(count == 0) {
-                            refeicao.dia = td.p.b.span;
-                        }
-                        if(count == 0) {
-                            refeicao.principal = p.span;
-                        }
-                        else if(count == 1) {
-                            refeicao.acompanhamento = p.span;
-                        }
-                        else if(count == 2) {
-                            refeicao.salada = p.span;
-                        }
-                        else if(count == 3) {
-                            refeicao.sobremesa = p.span;
-                        }
-                        else if(count == 4) {
-                            var countB = 0;
-                            for(var b in p.b) {
-                                if(countB == 0) {
-                                    refeicao.bebida = b.span;
-                                }
-                                else {
-                                    refeicao.calorias = b.span;
-                                    break;
-                                }
-                                countB += 1;
-                            }
-                        }
-                        count += 1;
-                    }*/
+                    
                     cardapio.cardapio += refeicao;
                     countRef += 1;
                 }
