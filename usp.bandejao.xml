@@ -12,29 +12,26 @@
             <key id='dia' type='xs:string' paramType='variable' required="false" />
             <key id='periodo' type='xs:string' paramType='variable' required="false" />
         </inputs>
-        <execute><![CDATA[
-            function findFirstTagIndices(htmlString, tag) {
-                var begin = htmlString.indexOf("<" + tag);
-                if (begin != -1) {
-                    begin = begin + htmlString.substring(begin).indexOf(">");
-                }
-                var end = htmlString.indexOf("</" + tag);
-                if (begin != -1 && end != -1 && begin + 1 < end) {
-                    return [begin + 1, end];
-                }
-                return [-1, -1];
-            }
-            
+        <execute><![CDATA[            
             function findTag(htmlString, tag) {
                 tags = [];
-                indices = findFirstTagIndices(htmlString, tag);
-                begin = indices[0];
-                end = indices[1];
-                while (begin != -1 && end != -1) {
+                while (1) {
+                    var begin = htmlString.indexOf("<" + tag);
+                    if (begin != -1) {
+                        begin = begin + htmlString.substring(begin).indexOf(">");
+                    }
+                    var end = htmlString.indexOf("</" + tag);
+                    if (begin != -1 && end != -1 && begin + 1 < end) {
+                        begin = begin + 1;
+                    }
+                    else {
+                        begin = -1;
+                        end = -1;
+                    }
+                    if (begin == -1 || end == -1) {
+                        break;
+                    }
                     tags.push(htmlString.substring(begin, end));
-                    indices = findFirstTagIndices(htmlString, tag);
-                    begin = indices[0];
-                    end = indices[1];
                 }
                 return tags;
             }
