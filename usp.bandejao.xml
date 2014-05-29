@@ -81,7 +81,7 @@
                 var countRef = 0;
                 var tds = findTag(tr, "td");
                 cardapio.tds += tds;
-                cardapio.trs += trs;
+                cardapio.trs += <tr> + trs + </tr>;
                 for (var td in tds) {
                     var refeicao = <refeicao></refeicao>
                     if(countRef == 0) {
