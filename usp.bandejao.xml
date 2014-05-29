@@ -28,10 +28,10 @@
                         begin = -1;
                         end = -1;
                     }
-                    if (begin == -1 || end == -1) {
-                        //break;
+                    if (begin != -1 && end != -1) {
+                        tags.push(htmlString.substring(begin, end));
                     }
-                    tags.push(htmlString.substring(begin, end));
+                    
                 }
                 return tags;
             }
