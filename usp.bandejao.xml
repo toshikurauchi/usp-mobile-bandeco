@@ -80,6 +80,7 @@
                 }
                 var countRef = 0;
                 var tds = findTag(tr, "td");
+                cardapio.tds += tds;
                 for (var td in tds) {
                     var refeicao = <refeicao></refeicao>
                     if(countRef == 0) {
@@ -95,37 +96,41 @@
                     
                     cardapio.cardapio += refeicao;
                     countRef += 1;
+                    /*for(var p in td.p) {
+                        if(count == 0) {
+                            refeicao.dia = td.p.b.span;
+                        }
+                        if(count == 0) {
+                            refeicao.principal = p.span;
+                        }
+                        else if(count == 1) {
+                            refeicao.acompanhamento = p.span;
+                        }
+                        else if(count == 2) {
+                            refeicao.salada = p.span;
+                        }
+                        else if(count == 3) {
+                            refeicao.sobremesa = p.span;
+                        }
+                        else if(count == 4) {
+                            var countB = 0;
+                            for(var b in p.b) {
+                                if(countB == 0) {
+                                    refeicao.bebida = b.span;
+                                }
+                                else {
+                                    refeicao.calorias = b.span;
+                                    break;
+                                }
+                                countB += 1;
+                            }
+                        }
+                        count += 1;
+                    }*/
                 }
             }
             response.object = cardapio;
             
-            /*results = query.results;
-            responseXML = <cursos></cursos>;
-            for each (var tr in results.tr) {
-                if(tr.elements('th').length() == 0) {
-                    curso = <curso></curso>;
-                    for each(var td in tr.td) {
-                        if(td.@['class'] == 'curso') {
-                            curso.curso += <nome>{td.a.*}</nome>;
-                        }
-                        if(td.@['class'] == 'data') {
-                            curso.curso += <data>{td.p.*}</data>;
-                        }
-                        if(td.@['class'] == 'periodo') {
-                            curso.curso += <periodo>{td.@title}</periodo>;
-                        }
-                        if(td.@['class'] == 'cidade') {
-                            curso.curso += <cidade>{td.p.*}</cidade>;
-                        }
-                        if(td.@['class'] == 'comentario') {
-                            curso.curso += <comentario>{td.p.*}</comentario>;
-                        }
-                    }
-                    responseXML.cursos += curso;
-                }
-            }
-            
-            response.object = responseXML;*/
         	]]></execute>
     </select>
 </bindings>
