@@ -15,7 +15,7 @@
         <execute><![CDATA[            
             function findTag(htmlString, tag) {
                 tags = [];
-                if (1) {
+
                     var begin = htmlString.indexOf("<" + tag);
                     if (begin != -1) {
                         begin = begin + htmlString.substring(begin).indexOf(">");
@@ -32,7 +32,6 @@
                         tags.push(htmlString.substring(begin, end));
                     }
                     
-                }
                 return tags;
             }
 
