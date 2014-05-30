@@ -30,7 +30,7 @@
                     if (end < 0) {
                         break;
                     }
-                    inners.push(htmlString.substring(0, end + 1));
+                    inners.push(htmlString.substring(0, end));
                     htmlString = htmlString.substring(end + 1);
                 }
                 return inners;
