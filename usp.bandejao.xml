@@ -112,7 +112,7 @@
                 y.exit(204, "Bandejao nao especificado."); 
             }
             var result = y.rest(url).get().response;
-            trs = findTag(result, "tr");
+            var trs = findTag(result, "tr");
             trs = trs.slice(1);
             
             var cardapio = <cardapio></cardapio>
