@@ -113,6 +113,7 @@
             
             var firstRow = true;
             var cardapio = <cardapio></cardapio>
+            cardapio.inner = trs;
             for (var tr_i in trs) {
                 var tr = trs[tr_i];
                 if(firstRow) {
