@@ -136,7 +136,9 @@
                         refeicao.dia = contents[0];
                         contents = contents.slice(1);
                         for (var i in contents) {
-                            refeicao.cardapio += contents[i];
+                            var item = <item></item>
+                            item += contents[i];
+                            refeicao.cardapio += item;
                         }
                         cardapio.cardapio += refeicao;
                     }
