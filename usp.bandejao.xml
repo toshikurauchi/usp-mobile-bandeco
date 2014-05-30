@@ -33,7 +33,13 @@
                     inners.push(htmlString.substring(0, end));
                     htmlString = htmlString.substring(end + 1);
                 }
-                return inners;
+                // Separa quando tiver \n e aplica o trim
+                retval = []
+                for (var i in inners) {
+                    retval.concat(inners[i].split("\n"));
+                }
+                retval = retval.map(function(str) {return str.trim()}).filter(function(str) {return str != ""});
+                return retval;
             }
             
             function findTag(htmlString, tag) {
