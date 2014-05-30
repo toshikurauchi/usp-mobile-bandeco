@@ -3,27 +3,28 @@
 <meta>
     <author>Andrew Kurauchi</author>
     <description>Cardapio do bandejao da USP</description>
-    <sampleQuery description="Consulta cardapio do bandejao da quimica para o almoco de segunda feira">select * from {table} where bandejao='quimica' and dia='segunda' and periodo='almoco';</sampleQuery>
+    <sampleQuery description="Consulta cardapio do bandejao da quimica para o almoco de segunda feira">select * from {table} where bandejao='quimica';</sampleQuery>
 </meta>
 <bindings>
     <select itemPath="" produces="XML">
         <inputs>  
             <key id='bandejao' type='xs:string' paramType='variable' required="true" />
-            <key id='dia' type='xs:string' paramType='variable' required="false" />
-            <key id='periodo' type='xs:string' paramType='variable' required="false" />
         </inputs>
         <execute><![CDATA[            
+            // Adiciona função em string (sim, eh perigoso, mas acho que nesse caso eh aceitavel)
             String.prototype.regexIndexOf = function(regex, startpos) {
                 var indexOf = this.substring(startpos || 0).search(regex);
                 return (indexOf >= 0) ? (indexOf + (startpos || 0)) : indexOf;
             }
             
+            // Verifica se str eh um dia da semana
             function diaValido(str) {
                 if(!str) {
                     return false;
                 }
                 var dias = ["segunda", "terça", "quarta", "quinta", "sexta", "sábado", "domingo"];
-                str = str.toLowerCase();
+                str = str.toLowerCase(); // Normalmente vem no formato "SEGUNDA-FEIRA", etc
+                // Compara com todos os dias
                 for (var i in dias) {
                     if (str.indexOf(dias[i]) >= 0) {
                         return true;
@@ -32,47 +33,54 @@
                 return false;
             }
             
-            function findContents(htmlString) {
-                var contents = [];
+            // Devolve tudo o que não for tag em um array
+            function encontraConteudos(strHtml) {
+                var conteudos = [];
                 while(1) {
-                    var begin = htmlString.regexIndexOf(/>\s*([a-z|A-Z])/);
-                    if (begin < 0) {
+                    var inicio = strHtml.regexIndexOf(/>\s*([a-z|A-Z])/); // Procura primeiro fim de tag
+                    if (inicio < 0) {
                         break;
                     }
-                    htmlString = htmlString.substring(begin + 1);
-                    var end = htmlString.indexOf("<");
-                    if (end < 0) {
+                    strHtml = strHtml.substring(inicio + 1);
+                    var fim = strHtml.indexOf("<"); // Procura primeiro comeco de tag
+                    if (fim < 0) {
                         break;
                     }
-                    contents.push(htmlString.substring(0, end));
-                    htmlString = htmlString.substring(end + 1);
+                    // Se chegou aqui eh porque encontrou um conteudo
+                    conteudos.push(strHtml.substring(0, fim));
+                    strHtml = strHtml.substring(fim + 1); // Prepara pra proxima iteracao
                 }
-                // Separa quando tiver \n e aplica o trim
+                // Separa quando tiver \n
                 var retval = [];
-                for (var i in contents) {
-                    retval = retval.concat(contents[i].split("\n"));
+                for (var i in conteudos) {
+                    retval = retval.concat(conteudos[i].split("\n"));
                 }
+                // Aplica trim em todas as strings e remove de retval as strings vazias
                 retval = retval.map(function(str) {return str.trim()}).filter(function(str) {return str != ""});
                 return retval;
             }
             
-            function findTag(htmlString, tag) {
+            // Devolve um array com o conteudo de todas as tags do tipo tag que encontrar
+            function encontraTag(strHtml, tag) {
                 var tags = [];
                 while(1) {
-                    var begin = htmlString.regexIndexOf(new RegExp("<(" + tag.toLowerCase() + "|" + tag.toUpperCase() + ")"));
-                    var end = htmlString.regexIndexOf(new RegExp("</(" + tag.toLowerCase() + "|" + tag.toUpperCase() + ")"));
-                    if (begin != -1) {
-                        begin = begin + htmlString.substring(begin).indexOf(">");
+                    // Procura comeco do abre tag
+                    var inicio = strHtml.regexIndexOf(new RegExp("<(" + tag.toLowerCase() + "|" + tag.toUpperCase() + ")"));
+                    // Procura comeco do fecha tag
+                    var fim = strHtml.regexIndexOf(new RegExp("</(" + tag.toLowerCase() + "|" + tag.toUpperCase() + ")"));
+                    if (inicio != -1) {
+                        inicio = inicio + strHtml.substring(inicio).indexOf(">"); // Procura fim do abre tag
                     }
                     else {
-                        begin = -1;
-                        end = -1;
+                        inicio = -1;
+                        fim = -1;
                     }
-                    if (begin != -1 && end != -1 && begin + 1 < end) {
-                        tags.push(htmlString.substring(begin + 1, end));
-                        htmlString = htmlString.substring(end);
-                        end = htmlString.indexOf(">");
-                        htmlString = htmlString.substring(end + 1);
+                    if (inicio != -1 && fim != -1 && inicio + 1 < fim) {
+                        // Encontrou um conteudo
+                        tags.push(strHtml.substring(inicio + 1, fim));
+                        strHtml = strHtml.substring(fim);
+                        fim = strHtml.indexOf(">");
+                        strHtml = strHtml.substring(fim + 1);
                     }
                     else {
                         break;
@@ -111,36 +119,35 @@
             if(url == '') {
                 y.exit(204, "Bandejao nao especificado."); 
             }
-            var result = y.rest(url).get().response;
-            var trs = findTag(result, "tr");
-            trs = trs.slice(1);
+            var resultHtml = y.rest(url).get().response;
+            var trs = encontraTag(resultHtml, "tr");
+            trs = trs.slice(1); // Primeiro tr tem os textos ALMOCO e JANTAR
             
             var cardapio = <cardapio></cardapio>
             for (var tr_i in trs) {
                 var tr = trs[tr_i];
-                var countRef = 0;
-                var tds = findTag(tr, "td");
+                var contaRef = 0; // Refeicao 0 eh almoco, 1 eh janta
+                var tds = encontraTag(tr, "td"); // Cada td eh uma refeicao
                 for (var td_i in tds) {
                     var td = tds[td_i];
                     var refeicao = <refeicao></refeicao>
-                    if(countRef == 0) {
+                    if(contaRef == 0) {
                         refeicao.periodo = 'almoco';
                     }
                     else {
                         refeicao.periodo = 'jantar';
                     }
-                    var count = 0;
-                    var contents = findContents(td);
-                    if (diaValido(contents[0])) {
-                        refeicao.dia = contents[0];
-                        contents = contents.slice(1);
-                        for (var i in contents) {
-                            refeicao.cardapio.item += <item>{contents[i]}</item>;
+                    var conteudos = encontraConteudos(td);
+                    if (diaValido(conteudos[0])) {
+                        refeicao.dia = conteudos[0];
+                        conteudos = conteudos.slice(1);
+                        for (var i in conteudos) {
+                            refeicao.cardapio.item += <item>{conteudos[i]}</item>;
                         }
                         cardapio.cardapio += refeicao;
                     }
                     
-                    countRef += 1;
+                    contaRef += 1;
                 }
             }
             response.object = cardapio;
