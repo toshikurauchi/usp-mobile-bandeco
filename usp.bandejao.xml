@@ -34,9 +34,9 @@
                     htmlString = htmlString.substring(end + 1);
                 }
                 // Separa quando tiver \n e aplica o trim
-                retval = []
+                retval = [];
                 for (var i in inners) {
-                    retval.concat(i);
+                    retval.concat(inners[i].split("\n"));
                 }
                 return retval;
                 retval = retval.map(function(str) {return str.trim()}).filter(function(str) {return str != ""});
