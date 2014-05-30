@@ -21,7 +21,7 @@
             function findInnerHtmls(htmlString) {
                 var inners = [];
                 while(1) {
-                    var begin = htmlString.regexIndexOf(/>([a-z|A-Z])/);
+                    var begin = htmlString.regexIndexOf(/>\s*([a-z|A-Z])/);
                     if (begin < 0) {
                         break;
                     }
