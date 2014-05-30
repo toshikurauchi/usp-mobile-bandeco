@@ -20,8 +20,9 @@
             
             function diaValido(str) {
                 var dias = ["segunda", "terça", "quarta", "quinta", "sexta", "sábado", "domingo"];
+                str = str.toLowerCase();
                 for (var i in dias) {
-                    if (str.indexOf(dias[i].toLowerCase()) >= 0) {
+                    if (str.indexOf(dias[i]) >= 0) {
                         return true;
                     }
                 }
