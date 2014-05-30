@@ -136,7 +136,7 @@
                         contents = contents.slice(1);
                         for (var i in contents) {
                             var item = <item></item>;
-                            item += contents[i];
+                            item.item += contents[i];
                             refeicao.cardapio.item += item;
                         }
                         cardapio.cardapio += refeicao;
