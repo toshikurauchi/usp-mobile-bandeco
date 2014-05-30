@@ -35,7 +35,6 @@
                 }
                 // Separa quando tiver \n e aplica o trim
                 var retval = [];
-                retval = retval.concat(inners);
                 for (var i in inners) {
                     retval = retval.concat(inners[i].split("\n"));
                 }
