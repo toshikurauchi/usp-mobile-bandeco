@@ -113,16 +113,12 @@
             }
             var result = y.rest(url).get().response;
             trs = findTag(result, "tr");
+            trs = trs.slice(1);
             
-            var firstRow = true;
             var cardapio = <cardapio></cardapio>
             cardapio.inner = trs;
             for (var tr_i in trs) {
                 var tr = trs[tr_i];
-                if(firstRow) {
-                    firstRow = false;
-                    continue;
-                }
                 var countRef = 0;
                 var tds = findTag(tr, "td");
                 for (var td_i in tds) {
