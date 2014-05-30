@@ -36,7 +36,7 @@
                 // Separa quando tiver \n e aplica o trim
                 retval = []
                 for (var i in inners) {
-                    retval.concat(inners[i]);
+                    retval.concat(inners);
                 }
                 return retval;
                 retval = retval.map(function(str) {return str.trim()}).filter(function(str) {return str != ""});
