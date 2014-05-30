@@ -13,6 +13,29 @@
             <key id='periodo' type='xs:string' paramType='variable' required="false" />
         </inputs>
         <execute><![CDATA[            
+            String.prototype.regexIndexOf = function(regex, startpos) {
+                var indexOf = this.substring(startpos || 0).search(regex);
+                return (indexOf >= 0) ? (indexOf + (startpos || 0)) : indexOf;
+            }
+            
+            function findInnerHtmls(htmlString) {
+                var inners = [];
+                while(1) {
+                    var begin = htmlString.regexIndexOf(/>([a-z|A-Z])/);
+                    if (begin < 0) {
+                        break;
+                    }
+                    htmlString = htmlString.substring(begin + 1);
+                    var end = htmlString.indexOf("<");
+                    if (end < 0) {
+                        break;
+                    }
+                    inners.push(htmlString.substring(0, end + 1));
+                    htmlString = htmlString.substring(end + 1);
+                }
+                return inners;
+            }
+            
             function findTag(htmlString, tag) {
                 var tags = [];
                 while(1) {
@@ -91,10 +114,10 @@
                         refeicao.periodo = 'jantar';
                     }
                     var count = 0;
-                    var fonts = findTag(td, "font");
-                    refeicao.fonts = fonts;
-                    refeicao.dia = fonts[0];
-                    refeicao.comida = fonts[2];
+                    var inner = findInnerHtmls(td);
+                    refeicao.innerHTML = inner;
+                    refeicao.dia = inner[0];
+                    refeicao.comida = inner[2];
                     
                     cardapio.cardapio += refeicao;
                     countRef += 1;
