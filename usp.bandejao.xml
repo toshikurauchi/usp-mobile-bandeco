@@ -79,28 +79,29 @@
             }
 
             var url = '';
-            if(bandejao.toLowerCase() == 'central') {
+            bandejao = bandejao.toLowerCase();
+            if(bandejao == 'central') {
                 url = 'http://www.usp.br/coseas/cardapio.html';
             }
-            else if(bandejao.toLowerCase() == 'fisica') {
+            else if(bandejao == 'fisica') {
                 url = 'http://www.usp.br/coseas/cardapiofisica.html';
             }
-            else if(bandejao.toLowerCase() == 'quimica') {
+            else if(bandejao == 'quimica') {
                 url = 'http://www.usp.br/coseas/cardapioquimica.html';
             }
-            else if(bandejao.toLowerCase() == 'pusp') {
+            else if(bandejao == 'pusp') {
                 url = 'http://www.usp.br/coseas/cardcocesp.html';
             }
-            else if(bandejao.toLowerCase() == 'doc') {
+            else if(bandejao == 'doc') {
                 url = 'http://www.usp.br/coseas/carddoc.html';
             }
-            else if(bandejao.toLowerCase() == 'enf') {
+            else if(bandejao == 'enf') {
                 url = 'http://www.usp.br/coseas/cardEscEnf.html';
             }
-            else if(bandejao.toLowerCase() == 'fsp') {
+            else if(bandejao == 'fsp') {
                 url = 'http://www.usp.br/coseas/cardFSP.html';
             }
-            else if(bandejao.toLowerCase() == 'direito') {
+            else if(bandejao == 'direito') {
                 url = 'http://www.usp.br/coseas/cardFacDireito.html';
             }
 
