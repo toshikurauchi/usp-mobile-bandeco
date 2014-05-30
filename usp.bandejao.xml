@@ -113,10 +113,10 @@
             }
             var result = y.rest(url).get().response;
             var trs = findTag(result, "tr");
-            trs = trs.slice(1);
             
             var cardapio = <cardapio></cardapio>
             cardapio.inner = trs;
+            trs = trs.slice(1);
             for (var tr_i in trs) {
                 var tr = trs[tr_i];
                 var countRef = 0;
