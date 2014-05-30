@@ -36,7 +36,7 @@
                 // Separa quando tiver \n e aplica o trim
                 retval = []
                 for (var i in inners) {
-                    retval.concat(inners[i].split("\n"));
+                    retval.concat(inners[i]);
                 }
                 return retval;
                 retval = retval.map(function(str) {return str.trim()}).filter(function(str) {return str != ""});
@@ -104,7 +104,7 @@
             var cardapio = <cardapio></cardapio>
             cardapio.cardapio.inner = trs;
             for (var tr_i in trs) {
-                var tr = trs[tr_i]
+                var tr = trs[tr_i];
                 if(firstRow) {
                     firstRow = false;
                     continue;
