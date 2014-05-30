@@ -18,8 +18,18 @@
                 return (indexOf >= 0) ? (indexOf + (startpos || 0)) : indexOf;
             }
             
-            function findInnerHtmls(htmlString) {
-                var inners = [];
+            function diaValido(str) {
+                var dias = ["segunda", "terça", "quarta", "quinta", "sexta", "sábado", "domingo"];
+                for (var i in dias) {
+                    if (str.indexOf(dias[i].toLowerCase()) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            
+            function findContents(htmlString) {
+                var contents = [];
                 while(1) {
                     var begin = htmlString.regexIndexOf(/>\s*([a-z|A-Z])/);
                     if (begin < 0) {
@@ -30,13 +40,13 @@
                     if (end < 0) {
                         break;
                     }
-                    inners.push(htmlString.substring(0, end));
+                    contents.push(htmlString.substring(0, end));
                     htmlString = htmlString.substring(end + 1);
                 }
                 // Separa quando tiver \n e aplica o trim
                 var retval = [];
-                for (var i in inners) {
-                    retval = retval.concat(inners[i].split("\n"));
+                for (var i in contents) {
+                    retval = retval.concat(contents[i].split("\n"));
                 }
                 retval = retval.map(function(str) {return str.trim()}).filter(function(str) {return str != ""});
                 return retval;
@@ -120,44 +130,17 @@
                         refeicao.periodo = 'jantar';
                     }
                     var count = 0;
-                    var inner = findInnerHtmls(td);
-                    refeicao.innerHTML = inner;
-                    refeicao.dia = inner[0];
-                    refeicao.comida = inner[2];
+                    var contents = findContents(td);
+                    if (diaValido(contents[0])) {
+                        refeicao.dia = contents[0];
+                        contents = contents.slice(1);
+                        for (var i in contents) {
+                            refeicao.cardapio += contents[i];
+                        }
+                        cardapio.cardapio += refeicao;
+                    }
                     
-                    cardapio.cardapio += refeicao;
                     countRef += 1;
-                    /*for(var p in td.p) {
-                        if(count == 0) {
-                            refeicao.dia = td.p.b.span;
-                        }
-                        if(count == 0) {
-                            refeicao.principal = p.span;
-                        }
-                        else if(count == 1) {
-                            refeicao.acompanhamento = p.span;
-                        }
-                        else if(count == 2) {
-                            refeicao.salada = p.span;
-                        }
-                        else if(count == 3) {
-                            refeicao.sobremesa = p.span;
-                        }
-                        else if(count == 4) {
-                            var countB = 0;
-                            for(var b in p.b) {
-                                if(countB == 0) {
-                                    refeicao.bebida = b.span;
-                                }
-                                else {
-                                    refeicao.calorias = b.span;
-                                    break;
-                                }
-                                countB += 1;
-                            }
-                        }
-                        count += 1;
-                    }*/
                 }
             }
             response.object = cardapio;
