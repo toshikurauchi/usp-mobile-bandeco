@@ -137,7 +137,7 @@
                         for (var i in contents) {
                             var item = <item></item>
                             item += contents[i];
-                            refeicao.cardapio += item;
+                            refeicao.cardapio.item += item;
                         }
                         cardapio.cardapio += refeicao;
                     }
