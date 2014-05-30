@@ -59,8 +59,8 @@
             function findTag(htmlString, tag) {
                 var tags = [];
                 while(1) {
-                    var begin = htmlString.indexOf("<" + tag);
-                    var end = htmlString.indexOf("</" + tag);
+                    var begin = htmlString.regexIndexOf(new RegExp("<" + tag.toLowerCase() + "|" + tag.toUpperCase()));
+                    var end = htmlString.regexIndexOf(new RegExp("</" + tag.toLowerCase() + "|" + tag.toUpperCase()));;
                     if (begin != -1) {
                         begin = begin + htmlString.substring(begin).indexOf(">");
                     }
