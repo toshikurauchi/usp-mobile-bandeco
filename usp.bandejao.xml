@@ -116,7 +116,7 @@
             trs = trs.slice(1);
             
             var cardapio = <cardapio></cardapio>
-            cardapio.inner = trs;
+            cardapio.inner = result;
             for (var tr_i in trs) {
                 var tr = trs[tr_i];
                 var countRef = 0;
