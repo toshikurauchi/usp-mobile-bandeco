@@ -33,6 +33,7 @@
                     inners.push(htmlString.substring(0, end));
                     htmlString = htmlString.substring(end + 1);
                 }
+                return inners;
                 // Separa quando tiver \n e aplica o trim
                 retval = []
                 for (var i in inners) {
