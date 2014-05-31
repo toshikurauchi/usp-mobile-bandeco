@@ -62,7 +62,7 @@
                 }
                 // Aplica trim em todas as strings, remove espacos adicionais e remove de retval as strings vazias
                 retval = retval.map(function(str) {
-                                        return str.trim().replace(/\s/g, ' ');
+                                        return str.trim().replace(/\s+/g, ' ');
                                     }).filter(function(str) {
                                         return str != "";
                                     });
