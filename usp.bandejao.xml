@@ -50,10 +50,15 @@
                     conteudos.push(strHtml.substring(0, fim));
                     strHtml = strHtml.substring(fim + 1); // Prepara pra proxima iteracao
                 }
-                // Separa quando tiver \n
+                // Separa quando tiver mais que um \n, senão so remove o \n
                 var retval = [];
                 for (var i in conteudos) {
-                    retval = retval.concat(conteudos[i].split("\n"));
+                    if (conteudos[i].split("\n").length - 1 > 1) {
+                        retval = retval.concat(conteudos[i].split("\n"));
+                    }
+                    else {
+                        retval.push(conteudos[i].replace(/\n/g, ''));
+                    }
                 }
                 // Aplica trim em todas as strings e remove de retval as strings vazias
                 retval = retval.map(function(str) {return str.trim()}).filter(function(str) {return str != ""});
@@ -120,16 +125,16 @@
                 y.exit(204, "Bandejao nao especificado."); 
             }
             var resultHtml = y.rest(url).get().response;
-            var trs = encontraTag(resultHtml, "tr");
-            trs = trs.slice(1); // Primeiro tr tem os textos ALMOCO e JANTAR
+            var dias = encontraTag(resultHtml, "tr");
+            dias = dias.slice(1); // Primeiro tr tem os textos ALMOCO e JANTAR
             
             var cardapio = <cardapio></cardapio>
-            for (var tr_i in trs) {
-                var tr = trs[tr_i];
+            for (var dia_i in dias) {
+                var dia = dias[dia_i];
                 var contaRef = 0; // Refeicao 0 eh almoco, 1 eh janta
-                var tds = encontraTag(tr, "td"); // Cada td eh uma refeicao
-                for (var td_i in tds) {
-                    var td = tds[td_i];
+                var refeicoesHtml = encontraTag(dia, "td"); // Cada td eh uma refeicao
+                for (var refeicao_i in refeicoesHtml) {
+                    var refeicaoHtml = refeicoesHtml[refeicao_i];
                     var refeicao = <refeicao></refeicao>
                     if(contaRef == 0) {
                         refeicao.periodo = 'almoco';
@@ -137,7 +142,7 @@
                     else {
                         refeicao.periodo = 'jantar';
                     }
-                    var conteudos = encontraConteudos(td);
+                    var conteudos = encontraConteudos(refeicaoHtml);
                     if (diaValido(conteudos[0])) {
                         refeicao.dia = conteudos[0];
                         conteudos = conteudos.slice(1);
