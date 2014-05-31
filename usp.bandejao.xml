@@ -60,8 +60,12 @@
                         retval.push(conteudos[i].replace(/\n/g, ''));
                     }
                 }
-                // Aplica trim em todas as strings e remove de retval as strings vazias
-                retval = retval.map(function(str) {return str.trim()}).filter(function(str) {return str != ""});
+                // Aplica trim em todas as strings, remove espacos adicionais e remove de retval as strings vazias
+                retval = retval.map(function(str) {
+                                        return str.trim().replace(/\s/g, ' ');
+                                    }).filter(function(str) {
+                                        return str != "";
+                                    });
                 return retval;
             }
             
