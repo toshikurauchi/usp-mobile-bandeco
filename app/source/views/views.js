@@ -61,6 +61,11 @@ enyo.kind({
 		{from: '.menu', to: '.$.mealList.collection'}
 	],
 	
+	create: function () {
+		this.inherited(arguments);
+		this.updateMenu();
+	},
+	
 	updateMenu: function(inSender, inEvent) {
 		/* chama YQL para atualizar o cardápio */
 		// show spinner
@@ -68,7 +73,6 @@ enyo.kind({
 		var menus = new usp.Menu();
 		menus.fetch({
 			success: function (d) {
-				console.log(d);
 				t.set('menu', d);
 				t.$.emptyMenu.hide();
 			}
