@@ -8,7 +8,7 @@ enyo.kind({
 	name: "usp.Menu",
 	kind: "enyo.Collection",
 	source: "jsonp",
-	url: "https://query.yahooapis.com/v1/public/yql?q=use%20'https%3A%2F%2Fraw.githubusercontent.com%2Ftoshikurauchi%2Fusp-mobile-bandeco%2Fmaster%2Fusp.bandejao.xml'%3B%0Aselect%20*%20from%20usp.bandejao%20where%20bandejao%3D%22central%22%3B&format=json&diagnostics=true",
+	url: "https://query.yahooapis.com/v1/public/yql?q=use%20'https%3A%2F%2Fraw.githubusercontent.com%2Ftoshikurauchi%2Fusp-mobile-bandeco%2Fmaster%2Fusp.bandejao.xml'%3B%0Aselect%20*%20from%20usp.bandejao%20where%20bandejao%3D%22pusp%22%3B&format=json&diagnostics=true",
 	parse: function (data) {
 		return data.query.results.cardapio.refeicao;
 	}
@@ -21,13 +21,17 @@ enyo.kind({
 		meal: null
 	},
 	
+	correctCase: function (s) {
+		return s[0].toUpperCase() + s.substr(1).toLowerCase();
+	},
+	
 	mealChanged: function (old) {
 		// correct case
 		var dia = this.meal.get('dia');
-		this.meal.set('dia', dia[0].toUpperCase() + dia.substr(1).toLowerCase());
+		this.meal.set('dia', this.correctCase(dia));
 		var per = this.meal.get('periodo');
 		per = per.replace('c', 'ç');
-		this.meal.set('periodo', per[0].toUpperCase() + per.substr(1).toLowerCase());
+		this.meal.set('periodo', this.correctCase(per));
 		
 	},
 	
@@ -41,7 +45,11 @@ enyo.kind({
 		{from: '.meal.dia', to: '.$.day.content'},
 		{from: '.meal.periodo', to: '.$.period.content'},
 		{from: '.meal.cardapio', to: '.$.food.content', transform: function (val) {
-			return val.item.join('<br>');
+			if (Array.isArray(val.item) === false) {
+				return this.correctCase(val.item); 
+			} else {
+				return val.item.join('<br>');
+			}
 		}},
 	]
 });
