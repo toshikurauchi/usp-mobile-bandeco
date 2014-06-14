@@ -17,7 +17,23 @@ enyo.kind({
 enyo.kind({
 	name: "usp.MenuDisplayDay",
 	
-	content: "menu aqui!!!"
+	published: {
+		meal: null
+	},
+	
+	components: [
+		{name: "day", content: "ADSAD"},
+		{name: "period", content: "ADSAD"},
+		{name: "food", allowHtml: true, content: "ADSAD"},
+	],
+	
+	bindings: [
+		{from: '.meal.dia', to: '.$.day.content'},
+		{from: '.meal.periodo', to: '.$.period.content'},
+		{from: '.meal.cardapio', to: '.$.food.content', transform: function (val) {
+			return val.item.join('<br>');
+		}},
+	]
 });
 
 enyo.kind({
@@ -35,47 +51,90 @@ enyo.kind({
 		 components: [
 			{content: "USP-Mobile - Cardápios", fit: true},
 			{kind: "onyx.Button", content: "Atualizar", ontap: "updateMenu"}, // trocar por icon button depois
-		 ]
-		},
-		{kind: "enyo.Scroller", fit: true, components: [
-			{name: "mealList", kind: "enyo.DataRepeater",
-			 components: [
-				{components: [
-					{name: "day", tag: 'div'},
-					{name: "period", tag: 'div'},
-					{name: "food", tag: 'div', allowHtml: true}
-				],
-				bindings: [
-					{from: '.model.dia', to: '.$.day.content'},
-					{from: '.model.periodo', to: '.$.period.content'},
-					{from: '.model.cardapio', to: '.$.food.content', transform: function (val) {
-						return val.item.join('<br>');
-					}}
-				]}
-			 ]},
-			{name: "emptyMenu", content: "Nenhum cardápio encontrado!."},
-		]}
-	],
-	
-	bindings: [
-		{from: '.menu', to: '.$.mealList.collection'}
+		]},
+			/*{kind: "FittableColumns", components: [
+				{kind: "onyx.PickerDecorator", components: [
+					{},
+					{kind: "onyx.Picker", onSelect: "selectMenu", components: [
+								{content: "Central", active: true},
+								{content: "Física"},
+								{content: "Química"},
+								{content: "PCO"},
+							]},
+						]
+					},
+					{kind: "onyx.PickerDecorator", components: [
+						{},
+						{kind: "onyx.Picker", onSelect: "selectMenu", components: [
+								{content: "Segunda", active: true},
+								{content: "Terça"},
+								{content: "Quarta"},
+								{content: "Quinta"},
+								{content: "Sexta"},
+								{content: "Sábado"},
+								{content: "Domingo"},
+							]},
+						]
+					},
+					{kind: "onyx.PickerDecorator", onSelect: "selectMenu", components: [
+						{},
+						{kind: "onyx.Picker", components: [
+								{content: "Almoço", active: true},
+								{content: "Jantar"},
+							]},
+						]
+					},
+			]},*/
+			{kind: "enyo.FittableColumns", fit: true, components: [
+				{kind: "onyx.Button", content: "<", ontap: "prevDay"},
+				{kind: "enyo.Panels", name: "mealsPanel", fit: true, components: [
+					{name: "emptyMenu", content: "Nenhum cardápio encontrado!."},
+				]},
+				{kind: "onyx.Button", content: ">", ontap: "nextDay"},
+			]},
 	],
 	
 	create: function () {
 		this.inherited(arguments);
 		this.updateMenu();
+		var i;
+		for (i = 0; i < 12; i++) {
+			this.$.mealsPanel.createComponent({kind: 'usp.MenuDisplayDay'});
+		}
+	},
+	
+	nextDay: function (is, ievt) {
+		if (this.$.mealsPanel.get('index') > 0) {
+			this.$.mealsPanel.next();
+		}
+	},
+	
+	prevDay: function (is, evt) {
+		if (this.$.mealsPanel.get('index') > 1) {
+			this.$.mealsPanel.previous();
+		}
+	},
+	
+	menuChanged: function (old) {
+		var i;
+		for (i = 0; i < this.menu.length; i++) {
+			this.$.mealsPanel.getComponents()[i+1].set('meal', this.menu.at(i));
+		}
 	},
 	
 	updateMenu: function(inSender, inEvent) {
-		/* chama YQL para atualizar o cardápio */
 		// show spinner
 		var t = this;
 		var menus = new usp.Menu();
 		menus.fetch({
 			success: function (d) {
 				t.set('menu', d);
-				t.$.emptyMenu.hide();
+				t.$.mealsPanel.setIndex(1);
 			}
 		});
 	},
+	
+	selectMenu: function (iSender, iEvent) {
+		console.log('Item selected!!!');
+	}
 });
