@@ -21,10 +21,20 @@ enyo.kind({
 		meal: null
 	},
 	
+	mealChanged: function (old) {
+		// correct case
+		var dia = this.meal.get('dia');
+		this.meal.set('dia', dia[0].toUpperCase() + dia.substr(1).toLowerCase());
+		var per = this.meal.get('periodo');
+		per = per.replace('c', 'ç');
+		this.meal.set('periodo', per[0].toUpperCase() + per.substr(1).toLowerCase());
+		
+	},
+	
 	components: [
-		{name: "day", content: "ADSAD"},
-		{name: "period", content: "ADSAD"},
-		{name: "food", allowHtml: true, content: "ADSAD"},
+		{name: "day"},
+		{name: "period"},
+		{name: "food", allowHtml: true},
 	],
 	
 	bindings: [
@@ -129,12 +139,17 @@ enyo.kind({
 		menus.fetch({
 			success: function (d) {
 				t.set('menu', d);
-				t.$.mealsPanel.setIndex(1);
+				var today = new Date();
+				var dw = today.getDay();
+				var index = (dw - 1 + 7) % 7;
+				if (index > 5) {
+					index += 10;
+				} else {
+					index = index * 2;
+				}
+				index++;
+				t.$.mealsPanel.setIndex(index);
 			}
 		});
 	},
-	
-	selectMenu: function (iSender, iEvent) {
-		console.log('Item selected!!!');
-	}
 });
