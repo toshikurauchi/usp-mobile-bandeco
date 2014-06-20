@@ -5,65 +5,101 @@
 */
 
 enyo.kind({
-	name: "usp.Menu",
-	kind: "enyo.Collection",
-	source: "jsonp",
-	url: "https://query.yahooapis.com/v1/public/yql?q=use%20'https%3A%2F%2Fraw.githubusercontent.com%2Ftoshikurauchi%2Fusp-mobile-bandeco%2Fmaster%2Fusp.bandejao.xml'%3B%0Aselect%20*%20from%20usp.bandejao%20where%20bandejao%3D%22central%22%3B&format=json",
+	name: "usp.MenuCard",
+	classes: "usp-card",
 	
 	published: {
-		bandejao: "central",
-		displayName: "Central"
-	},
-	
-	bindings: [
-		{from: ".bandejao", to: ".url", transform: function(val) {
-			return "https://query.yahooapis.com/v1/public/yql?q=use%20'https%3A%2F%2Fraw.githubusercontent.com%2Ftoshikurauchi%2Fusp-mobile-bandeco%2Fmaster%2Fusp.bandejao.xml'%3B%0Aselect%20*%20from%20usp.bandejao%20where%20bandejao%3D%22" + val + "%22%3B&format=json";
-		}},
-	],	
-	
-	parse: function (data) {
-		return data.query.results.cardapio.refeicao;
-	},
-});
-
-enyo.kind({
-	name: "usp.MenuDisplayDay",
-	
-	published: {
-		meal: null
-	},
-	
-	correctCase: function (s) {
-		return s[0].toUpperCase() + s.substr(1).toLowerCase();
-	},
-	
-	mealChanged: function (old) {
-		// correct case
-		var dia = this.meal.get('dia');
-		this.meal.set('dia', this.correctCase(dia));
-		var per = this.meal.get('periodo');
-		per = per.replace('c', 'ç');
-		this.meal.set('periodo', this.correctCase(per));
-		
+		restaurant: "",
+		menu: null,
 	},
 	
 	components: [
-		{name: "day"},
-		{name: "period"},
-		{name: "food", allowHtml: true},
+		{name: 'restaurantDisplay', content: ""},
+		{tag: 'hr'},
+		{name: 'dinner', classes: "usp-card-right", content: "Jantar", allowHtml: true},
+		{name: 'lunch', classes: "usp-card-left", content: "Almoço", allowHtml: true},
+	],
+
+	bindings: [
+		{from: '.restaurant', to: '.$.restaurantDisplay.content'},
+		{from: '.menu', to: '.$.dinner.content', transform: function (val) {
+			var today = (new Date().getDay() + 6) % 7;
+			if (today < 6) {
+				today = 2 * today + 1;
+			} else {
+				today += 5;
+			}
+			var today_menu = val.at(today).get('cardapio').item;
+			if (Array.isArray(today_menu) == false) {
+				return today_menu;
+			} else {
+				return today_menu.join('<br>');
+			}
+		}},
+		{from: '.menu', to: '.$.lunch.content', transform: function (val) {
+			var today = (new Date().getDay() + 6) % 7;
+			if (today < 6) {
+				today = 2 * today;
+			} else {
+				today += 5;
+			}
+			var today_menu = val.at(today).get('cardapio').item;
+			if (Array.isArray(today_menu) == false) {
+				return today_menu;
+			} else {
+				return today_menu.join('<br>');
+			}	
+		}},
+	],
+})
+
+enyo.kind({
+	name: "usp.TodayPanel",
+	kind: "FittableRows",
+	fit: true,
+	classes: "",
+	
+	published: {
+		restaurants: null,
+	},
+	
+	components: [
+		{kind: "onyx.Toolbar", layoutKind: "FittableColumnsLayout", components: [
+			{name: "day"},
+		]},
+		
+		{kind: "enyo.Scroller", vertical: "scroll", fit: true, components: [
+			{name: "cards", kind: "FittableRows", components: [
+				
+			]},
+		]},
 	],
 	
 	bindings: [
-		{from: '.meal.dia', to: '.$.day.content'},
-		{from: '.meal.periodo', to: '.$.period.content'},
-		{from: '.meal.cardapio', to: '.$.food.content', transform: function (val) {
-			if (Array.isArray(val.item) === false) {
-				return this.correctCase(val.item); 
-			} else {
-				return val.item.join('<br>');
-			}
-		}},
-	]
+		
+	],
+	
+	create: function() {
+		this.inherited(arguments);
+		var d = new Date();
+		var days = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+		this.$.day.set('content', days[d.getDay()]);
+	},
+	
+	restaurantsChanged: function (old) {
+		var k = Object.keys(this.restaurants);
+		console.log(this.restaurants);
+		console.log(k);
+		var i;
+		for (i = 0; i < k.length; i++) {
+			this.$.cards.createComponent({
+				kind: "usp.MenuCard",
+				restaurant: k[i],
+				menu: this.restaurants[k[i]],
+			});
+		}
+		this.render();
+	},
 });
 
 enyo.kind({
@@ -78,58 +114,24 @@ enyo.kind({
 	restaurants: {},
 	
 	components:[
-		{kind: "onyx.Toolbar",
-		 layoutKind: "FittableColumnsLayout",
-		 components: [
-			{content: "USP-Mobile - Cardápios", fit: true},
-			{kind: "onyx.Button", content: "Atualizar", ontap: "updateMenus"}, // trocar por icon button depois
-		]},
-		{kind: "onyx.PickerDecorator", components: [
-			{style: "min-width: 150px"},
-			{kind: "onyx.Picker", onSelect: "selectRestaurant", components: [
-				{content: "Central", active: true},
-				{content: "Física"},
-				{content: "Química"},
-				{content: "Prefeitura"},
-				{content: "Doc?"},
-				{content: "Enfermagem"},
-				{content: "FSP"},
-				{content: "Direito"},
-			]},
-		]},
-		{kind: "enyo.FittableColumns", fit: true, components: [
-			{kind: "onyx.Button", content: "<", ontap: "prevDay"},
-			{kind: "enyo.Panels", name: "mealsPanel", fit: true, components: [
-				{name: "emptyMenu", content: "Nenhum cardápio encontrado!."},
-			]},
-			{kind: "onyx.Button", content: ">", ontap: "nextDay"},
-		]},
+		{kind: "enyo.Panels", name: "views", fit: true, draggable: false, components: [
+			{kind: "usp.TodayPanel", name: "todayView"},		
+			{kind: "usp.WeekPanel", name: "weekView"},
+		]},		
+		{kind: "onyx.Toolbar", components: [
+			{kind: "onyx.Button", content: "Today", ontap: "viewToday"},
+			{kind: "onyx.Button", content: "Week", ontap: "viewWeekPopup"}
+		]}
 	],
 	
 	create: function () {
 		this.inherited(arguments);
-		//this.updateMenu();
-		var i;
-		for (i = 0; i < 12; i++) {
-			this.$.mealsPanel.createComponent({kind: 'usp.MenuDisplayDay'});
-		}
 		var t = this;
 		this.updateMenus({success: function (m) {
-			t.set('menu', t.restaurants["Central"]);
+			t.$.weekView.set('restaurants', t.restaurants);
+			t.$.todayView.set('restaurants', t.restaurants);
 		}});
 		
-	},
-	
-	nextDay: function (is, ievt) {
-		if (this.$.mealsPanel.get('index') > 0) {
-			this.$.mealsPanel.next();
-		}
-	},
-	
-	prevDay: function (is, evt) {
-		if (this.$.mealsPanel.get('index') > 1) {
-			this.$.mealsPanel.previous();
-		}
 	},
 	
 	menuChanged: function (old) {
@@ -144,10 +146,11 @@ enyo.kind({
 							"Física": "fisica",
 							"Química": "quimica",
 							"Prefeitura": "pusp",
-							"Doc?": "doc",
-							"Enfermagem": "enf",
-							"FSP": "fsp",
-							"Direito": "direito"};
+							//"Doc?": "doc",
+							//"Enfermagem": "enf",
+							//"FSP": "fsp",
+							//"Direito": "direito"
+							};
 		var keys = Object.keys(restaurantes);
 		var loaded = 0;
 		var t = this;
@@ -169,7 +172,7 @@ enyo.kind({
 						index = index * 2;
 					}
 					index++;
-					t.$.mealsPanel.setIndex(index);
+					//t.$.mealsPanel.setIndex(index);
 					if (opts.success !== undefined) {
 						opts.success(m);
 					}
@@ -178,7 +181,11 @@ enyo.kind({
 		}
 	},
 	
-	selectRestaurant: function (is, ievt) {
-		this.set('menu', this.restaurants[is.get('selected').content]);
+	viewToday: function () {
+		this.$.views.setIndex(0);
+	},
+	
+	viewWeekPopup: function () {
+		this.$.views.setIndex(1);
 	},
 });
