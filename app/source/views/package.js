@@ -1,4 +1,6 @@
 enyo.depends(
 	"views.js",
-    'week.js'
+    'week.js',
+    'settings.js',
+    'today.js'
 );

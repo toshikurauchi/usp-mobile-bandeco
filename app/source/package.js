@@ -11,5 +11,6 @@ enyo.depends(
 	// View kind definitions
 	"views",
 	// Include our default entry point
-	"app.js"
+	"app.js",
+    "controller.js"
 );

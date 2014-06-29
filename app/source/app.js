@@ -7,7 +7,11 @@
 enyo.kind({
 	name: "usp.Bandejao",
 	kind: "enyo.Application",
-	view: "usp.BandejaoView"
+	view: "usp.BandejaoView",
+	
+	components: [
+		{kind: "usp.Controller", name: "controller"},
+	]
 });
 
 enyo.ready(function () {

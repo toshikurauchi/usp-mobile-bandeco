@@ -25,3 +25,29 @@ enyo.kind({
 		return data.query.results.cardapio.refeicao;
 	},
 });
+
+
+enyo.kind({
+    name: "usp.Settings",
+    kind: "enyo.Model",
+    
+    defaults: {
+        order: [
+            {displayName: "Central", key: "central", show: true, order: 1},
+            {displayName: "Química", key: "quimica", show: true, order: 2},
+            {displayName: "Física", key: "fisica", show: true, order: 3},
+            {displayName: "Prefeitura", key: "pusp", show: true, order: 4},
+        ]
+    },
+    
+    commit: function (opt) {
+        localStorage['order'] = JSON.stringify(this.get('order'));
+    },
+    
+    fetch: function (opt) {
+        var ord = localStorage['order'];
+        if (ord !== undefined && ord !== 'undefined') {
+            this.set('order', JSON.parse(ord));
+        }
+    },
+})

@@ -7,11 +7,6 @@ enyo.kind({
 		meal: null
 	},
 	
-	events: {
-		next: "",
-		prev: ""
-	},
-	
 	correctCase: function (s) {
 		return s[0].toUpperCase() + s.substr(1).toLowerCase();
 	},
@@ -59,10 +54,9 @@ enyo.kind({
 		{kind: "onyx.Toolbar",
 		 layoutKind: "FittableColumnsLayout",
 		 components: [
-			{content: "asddsa", fit: true, name: "displayName"},
 			{kind: "onyx.PickerDecorator", components: [
 			{style: "min-width: 150px"},
-			{kind: "onyx.Picker", onSelect: "selectRestaurant", components: [
+			{kind: "onyx.Picker", name: "display", onSelect: "selectRestaurant", components: [
 				{content: "Central", active: true},
 				{content: "Física"},
 				{content: "Química"},
@@ -81,12 +75,9 @@ enyo.kind({
 			{kind: "enyo.Panels", name: "mealsPanel", fit: true, components: [
 			]},
 			{kind: "onyx.Button", content: ">", ontap: "nextDay"},
-		]}
-	],
-	
-	
-	bindings: [
-		{from: ".active", to: ".$.displayName.content"}
+		]},
+		
+		{kind: "Signals", onMenuLoaded: "reloadAll"}
 	],
 	
 	create: function () {
@@ -97,6 +88,10 @@ enyo.kind({
 		}
 	},
 	
+	reloadAll: function (sender, evt) {
+		this.set('restaurants', evt.restaurants);
+	},
+	
 	restaurantsChanged: function (old) {
         this.$.emptyMenu.hide();
 		this.set('active', 'Central');
@@ -105,7 +100,13 @@ enyo.kind({
 	
 	activeChanged: function (old) {
 		var i;
-		var menu = this.restaurants[this.active];
+		var h = {
+			"Central": "central",
+			"Física": "fisica",
+			"Química": "quimica",
+			"Prefeitura": "pusp"		
+		};
+		var menu = this.restaurants[h[this.active]];
 		for (i = 0; i < menu.length; i++) {
 			this.$.mealsPanel.getPanels()[i].set('meal', menu.at(i));
 		}
@@ -113,16 +114,13 @@ enyo.kind({
 	
 	
 	showToday: function () {
-		var today = new Date();
-		var dw = today.getDay();
-		var index = (dw - 1 + 7) % 7;
-		if (index > 5) {
-			index += 10;
+		var today = (new Date().getDay() + 6) % 7;
+		if (today < 6) {
+			today = 2 * today;
 		} else {
-			index = index * 2;
+			today += 5;
 		}
-		index++;
-		this.$.mealsPanel.setIndex(index);
+		this.$.mealsPanel.setIndex(today);
 	},
 	
 	selectRestaurant: function (isender, ievt) {
