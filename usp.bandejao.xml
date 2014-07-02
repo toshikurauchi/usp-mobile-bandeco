@@ -127,8 +127,8 @@
                         }
                     }
                     else if (comparaTag(tag, "br") ||
-                             (comparaTag(tag, "p") && ehFechaTag(tag)) ||
-                             (comparaTag(tag, "div") && ehFechaTag(tag))) {
+                             comparaTag(tag, "p") ||
+                             comparaTag(tag, "div")) {
                         conteudoStr += "\n";
                     }
                 }
