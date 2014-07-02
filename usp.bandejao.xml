@@ -119,6 +119,7 @@
                     if (comparaTag(tag, "pre")) {
                         if (ehFechaTag(tag)) {
                             contaPre -= 1;
+                            conteudoStr += "\n";
                         }
                         else {
                             contaPre += 1;
