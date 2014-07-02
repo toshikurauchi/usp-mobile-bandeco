@@ -95,10 +95,18 @@
                 return tagStr.indexOf("</") >= 0 || tagStr.indexOf("/>") >= 0;
             }
             
+            function decodeHtml(strHtml) {
+                strHtml = strHtml.replace(/&nbsp;/g, " ");
+                strHtml = strHtml.replace(/&atilde;/g, "ã");
+                strHtml = strHtml.replace(/&oacute;/g, "ó");
+                strHtml = strHtml.replace(/&ccedil;/g, "ç");
+                return strHtml;
+            }
+            
             // Devolve tudo o que não for tag em um array
             function encontraConteudos(strHtml) {
                 strHtml = limpaTagsInuteis(strHtml);
-                strHtml = strHtml.replace(/&nbsp;/g, " ");
+                strHtml = decodeHtml(strHtml);
                 var conteudoStr = "";
                 var contaPre = 0;
                 while(1) {
