@@ -98,6 +98,7 @@
             // Devolve tudo o que não for tag em um array
             function encontraConteudos(strHtml) {
                 strHtml = limpaTagsInuteis(strHtml);
+                strHtml = strHtml.replace(/&nbsp;/g, " ");
                 var conteudoStr = "";
                 var contaPre = 0;
                 while(1) {
