@@ -118,9 +118,9 @@
                     var tag = strHtml.substring(0, fim + 1);
                     strHtml = strHtml.substring(fim + 1); // Prepara pra próxima iteração
                     if (comparaTag(tag, "pre")) {
+                        conteudoStr += "\n";
                         if (ehFechaTag(tag)) {
                             contaPre -= 1;
-                            conteudoStr += "\n";
                         }
                         else {
                             contaPre += 1;
