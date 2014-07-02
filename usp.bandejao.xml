@@ -54,18 +54,18 @@
             
             // Limpa tags span, font, b, i, u e center
             function limpaTagsInuteis(strHtml) {
-                var retVal = "";
+                var retval = "";
                 while(1) {
                     var inicio = strHtml.indexOf("<"); // Procura primeiro início de tag
                     if (inicio < 0) {
-                        retVal += strHtml;
+                        retval += strHtml;
                         break;
                     }
-                    retVal += strHtml.substring(0, inicio);
+                    retval += strHtml.substring(0, inicio);
                     strHtml = strHtml.substring(inicio);
                     var fim = strHtml.indexOf(">"); // Procura primeiro fim de tag
                     if (fim < 0) {
-                        retVal += strHtml;
+                        retval += strHtml;
                         break;
                     }
                     var tag = strHtml.substring(0, fim + 1);
@@ -75,7 +75,7 @@
                         !comparaTag(tag, "i") &&
                         !comparaTag(tag, "u") &&
                         !comparaTag(tag, "center")) {
-                        retVal += strHtml.substring(0, fim + 1);
+                        retval += strHtml.substring(0, fim + 1);
                     }
                     strHtml = strHtml.substring(fim + 1); // Prepara pra proxima iteracao
                 }
@@ -130,7 +130,7 @@
                         conteudoStr += "\n";
                     }
                 }
-                var retVal = conteudoStr.split("\n"); // Separa por\n
+                var retvretvalal = conteudoStr.split("\n"); // Separa por\n
                 // Aplica trim em todas as strings, remove espacos adicionais e remove de retval as strings vazias
                 retval = retval.map(function(str) {
                                         return str.trim().replace(/\s+/g, ' ');
