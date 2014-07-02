@@ -130,7 +130,7 @@
                         conteudoStr += "\n";
                     }
                 }
-                var retvretvalal = conteudoStr.split("\n"); // Separa por\n
+                var retval = conteudoStr.split("\n"); // Separa por\n
                 // Aplica trim em todas as strings, remove espacos adicionais e remove de retval as strings vazias
                 retval = retval.map(function(str) {
                                         return str.trim().replace(/\s+/g, ' ');
