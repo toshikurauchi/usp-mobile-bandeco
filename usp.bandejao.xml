@@ -33,33 +33,104 @@
                 return false;
             }
             
-            // Devolve tudo o que não for tag em um array
-            function encontraConteudos(strHtml) {
-                var conteudos = [];
+            // Devolve true se tagStr ("<td bgColor=#ffffff>") é a tag nomeTag ("td")
+            function comparaTag(tagStr, nomeTag) {
+                var inicio = 1;
+                if (tagStr[1] == "/") {
+                    inicio = 2;
+                }
+                tagStr = tagStr.substring(inicio); // Remove "</"
+                var fim = tagStr.indexOf(">");
+                if (tagStr[fim - 1] == "/") {
+                    fim = fim - 1;
+                }
+                var fimTag = tagStr.indexOf(" ");
+                if (fimTag < 0 || fimTag >= fim) {
+                    fimTag = fim;
+                }
+                var tag = tagStr.substring(0, fimTag).toLowerCase();
+                return nomeTag.toLowerCase() == tag;
+            }
+            
+            // Limpa tags span, font, b, i, u e center
+            function limpaTagsInuteis(strHtml) {
+                var retVal = "";
                 while(1) {
-                    var inicio = strHtml.regexIndexOf(/>\s*([a-z|A-Z])/); // Procura primeiro fim de tag
+                    var inicio = strHtml.indexOf("<"); // Procura primeiro início de tag
                     if (inicio < 0) {
+                        retVal += strHtml;
                         break;
                     }
-                    strHtml = strHtml.substring(inicio + 1);
-                    var fim = strHtml.indexOf("<"); // Procura primeiro comeco de tag
+                    retVal += strHtml.substring(0, inicio);
+                    strHtml = strHtml.substring(inicio);
+                    var fim = strHtml.indexOf(">"); // Procura primeiro fim de tag
                     if (fim < 0) {
+                        retVal += strHtml;
                         break;
                     }
-                    // Se chegou aqui eh porque encontrou um conteudo
-                    conteudos.push(strHtml.substring(0, fim));
+                    var tag = strHtml.substring(0, fim + 1);
+                    if (!comparaTag(tag, "span") && 
+                        !comparaTag(tag, "font") &&
+                        !comparaTag(tag, "b") &&
+                        !comparaTag(tag, "i") &&
+                        !comparaTag(tag, "u") &&
+                        !comparaTag(tag, "center")) {
+                        retVal += strHtml.substring(0, fim + 1);
+                    }
                     strHtml = strHtml.substring(fim + 1); // Prepara pra proxima iteracao
                 }
-                // Separa quando tiver mais que um \n, senão so remove o \n
-                var retval = [];
-                for (var i in conteudos) {
-                    if (conteudos[i].split("\n").length - 1 > 1) {
-                        retval = retval.concat(conteudos[i].split("\n"));
+                return retval;
+            }
+            
+            // Devolve str com ou sem "\n"
+            function consideraQuebra(quebra, str) {
+                if (quebra) {
+                    return str;
+                }
+                return str.replace(/\n+/g, '');
+            }
+            
+            // Devolve se é fecha tag
+            function ehFechaTag(tagStr) {
+                return tagStr.indexOf("</") >= 0 || tagStr.indexOf("/>") >= 0;
+            }
+            
+            // Devolve tudo o que não for tag em um array
+            function encontraConteudos(strHtml) {
+                strHtml = limpaTagsInuteis(strHtml);
+                var conteudoStr = "";
+                var contaPre = 0;
+                while(1) {
+                    var inicio = strHtml.indexOf("<"); // Procura primeiro início de tag
+                    if (inicio < 0) {
+                        conteudoStr += consideraQuebra(contaPre, strHtml);
+                        break;
                     }
-                    else {
-                        retval.push(conteudos[i].replace(/\n/g, ''));
+                    conteudoStr += consideraQuebra(contaPre, strHtml.substring(0, inicio));
+                    strHtml = strHtml.substring(inicio);
+                    var fim = strHtml.indexOf(">"); // Procura primeiro fim de tag
+                    if (fim < 0) {
+                        conteudoStr += consideraQuebra(contaPre, strHtml);
+                        break;
+                    }
+                    // Processa tags
+                    var tag = strHtml.substring(0, fim + 1);
+                    strHtml = strHtml.substring(fim + 1); // Prepara pra próxima iteração
+                    if (comparaTag(tag, "pre")) {
+                        if (ehFechaTag(tag)) {
+                            contaPre -= 1;
+                        }
+                        else {
+                            contaPre += 1;
+                        }
+                    }
+                    else if (comparaTag(tag, "br") ||
+                             (comparaTag(tag, "p") && ehFechaTag(tag)) ||
+                             (comparaTag(tag, "div") && ehFechaTag(tag))) {
+                        conteudoStr += "\n";
                     }
                 }
+                var retVal = conteudoStr.split("\n"); // Separa por\n
                 // Aplica trim em todas as strings, remove espacos adicionais e remove de retval as strings vazias
                 retval = retval.map(function(str) {
                                         return str.trim().replace(/\s+/g, ' ');
